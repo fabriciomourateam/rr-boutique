@@ -147,9 +147,21 @@ Nada construído nas fases anteriores é descartado: tudo se encaixa no modelo d
 
 ## 7. Visual / identidade
 
-O visual da vitrine será definido depois, a partir de referências fornecidas pelo solicitante
-(logo, cores da marca, prints de sites de referência — ex.: Lojas Renner). A estrutura é
-independente do visual, então o tema pode ser ajustado sem alterar a lógica do sistema.
+**Logo recebido** (RR Boutique — Moda Feminina). Paleta da marca derivada do logo:
+
+| Cor | Uso | Hex aproximado |
+|-----|-----|----------------|
+| Preto | fundo / base elegante | `#0A0A0A` |
+| Rosa blush (rosé) | cor principal / destaques / botões | `#E89BB0` |
+| Branco | texto / contraste | `#FFFFFF` |
+| Rosa claro | detalhes suaves | `#F3C6D3` |
+
+Estilo: sofisticado, feminino, tipografia com serifa elegante (display) para títulos.
+Tagline: *Moda Feminina — Estilo • Elegância • Confiança*.
+
+Referências adicionais de layout (ex.: prints de sites que o solicitante curtiu, como a Lojas
+Renner) podem ser fornecidas depois. A estrutura é independente do visual, então o tema pode ser
+ajustado sem alterar a lógica do sistema.
 
 ---
 
