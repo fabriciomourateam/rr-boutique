@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --brand-black: #0A0A0A;
-  --brand-rose: #E89BB0;
-  --brand-rose-light: #F3C6D3;
+  --brand-black: #0B0B0D;
+  --brand-black-soft: #111214;
+  --brand-surface: #17181B;
+  --brand-cream: #F7F3EF;
+  --brand-rose: #E8A1B4;
+  --brand-rose-hover: #D98DA3;
+  --brand-rose-light: #F3C7D2;
+  --brand-gold: #C8A97E;
+  --brand-text: #F6F1EB;
+  --brand-text-muted: #B8AEA6;
   --brand-white: #FFFFFF;
 }
 
@@ -11,11 +18,24 @@
   --font-sans: var(--font-body);
   --font-serif: var(--font-display);
   --color-brand-black: var(--brand-black);
+  --color-brand-black-soft: var(--brand-black-soft);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-cream: var(--brand-cream);
   --color-brand-rose: var(--brand-rose);
+  --color-brand-rose-hover: var(--brand-rose-hover);
   --color-brand-rose-light: var(--brand-rose-light);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-text: var(--brand-text);
+  --color-brand-text-muted: var(--brand-text-muted);
 }
 
 body {
   background: #ffffff;
-  color: #171717;
+  color: #17181B;
+}
+
+/* títulos com a serifada elegante */
+.font-serif {
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: 0.01em;
 }

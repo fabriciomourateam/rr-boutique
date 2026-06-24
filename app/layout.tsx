@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 
-const serif = Playfair_Display({ subsets: ["latin"], variable: "--font-display" });
+const serif = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+});
 const sans = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: "RR Boutiques — Moda Feminina",
-  description: "Estilo, elegância e confiança. Moda feminina RR Boutiques.",
+  title: "RR Boutiques | Moda Feminina com Elegância e Sofisticação",
+  description:
+    "Peças femininas selecionadas com curadoria, sofisticação e estilo. Nova coleção RR Boutiques.",
 };
 
 export default function RootLayout({
