@@ -13,6 +13,7 @@ export default async function PainelLayout({ children }: { children: React.React
         <p className="font-serif text-[#E89BB0] text-lg mb-4">RR Boutiques</p>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel">Início</Link>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/produtos">Produtos</Link>
+        <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/fiado">Fiado / A Receber</Link>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/categorias">Categorias</Link>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/config">Configurações</Link>
         <form action="/auth/sign-out" method="post" className="pt-6">

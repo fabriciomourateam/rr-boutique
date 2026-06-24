@@ -32,6 +32,21 @@ export interface Category {
   parentId: string | null
 }
 
+export interface CreditSale {
+  id: string
+  customerName: string
+  customerWhatsapp: string
+  productId: string | null
+  variantId: string | null
+  description: string
+  amountCents: number
+  quantity: number
+  saleDate: string        // ISO YYYY-MM-DD
+  dueDate: string | null  // ISO YYYY-MM-DD
+  paid: boolean
+  paidAt: string | null
+}
+
 export interface StoreConfig {
   name: string
   whatsapp: string         // só dígitos, com DDI: ex 5511999999999

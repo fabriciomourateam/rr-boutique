@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import type { Product, Category, StoreConfig } from '@/lib/types'
+import type { Product, Category, StoreConfig, CreditSale } from '@/lib/types'
 
 const PUBLIC_PRODUCT_COLS =
   'id, slug, name, description, category_id, price_cents, discount_type, discount_value, ' +
@@ -101,6 +101,35 @@ export async function getCategories(): Promise<Category[]> {
     .order('name')
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   return (data ?? []).map((c: any) => ({ id: c.id, slug: c.slug, name: c.name, parentId: c.parent_id }))
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function mapCreditSale(row: any): CreditSale {
+  return {
+    id: row.id,
+    customerName: row.customer_name,
+    customerWhatsapp: row.customer_whatsapp ?? '',
+    productId: row.product_id,
+    variantId: row.variant_id,
+    description: row.description,
+    amountCents: row.amount_cents,
+    quantity: row.quantity,
+    saleDate: row.sale_date,
+    dueDate: row.due_date,
+    paid: row.paid,
+    paidAt: row.paid_at,
+  }
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export async function getCreditSales(): Promise<CreditSale[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('credit_sales')
+    .select('*')
+    .order('paid', { ascending: true })
+    .order('due_date', { ascending: true, nullsFirst: false })
+  return (data ?? []).map(mapCreditSale)
 }
 
 export async function getStoreConfig(): Promise<StoreConfig> {
