@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getAllProductsAdmin } from '@/lib/data'
 import { formatBRL } from '@/lib/money'
 import { totalStock } from '@/lib/stock'
-import { toggleVisible, deleteProduct } from './actions'
+import { toggleVisible, deleteProduct, addStock } from './actions'
 
 export default async function ProdutosPage() {
   const products = await getAllProductsAdmin()
@@ -17,7 +17,7 @@ export default async function ProdutosPage() {
       <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-neutral-500 border-b">
-            <th className="py-2">Peça</th><th>Preço</th><th>Estoque</th><th>Na loja?</th><th></th>
+            <th className="py-2">Peça</th><th>Preço</th><th>Estoque</th><th>Repor estoque</th><th>Na loja?</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +28,31 @@ export default async function ProdutosPage() {
               </td>
               <td>{formatBRL(p.priceCents)}</td>
               <td>{totalStock(p)}</td>
+              <td>
+                {p.hasGrid ? (
+                  p.variants.length > 0 ? (
+                    <form action={addStock} className="flex items-center gap-1">
+                      <select name="variantId" className="border rounded px-1 py-0.5 text-xs max-w-[120px]">
+                        {p.variants.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {[v.size, v.color].filter(Boolean).join('/') || 'var'} ({v.stock})
+                          </option>
+                        ))}
+                      </select>
+                      <input name="qty" type="number" min="1" defaultValue="1" className="w-12 border rounded px-1 py-0.5 text-xs" />
+                      <button className="text-green-700 text-xs font-medium">+</button>
+                    </form>
+                  ) : (
+                    <span className="text-xs text-neutral-400">sem grade</span>
+                  )
+                ) : (
+                  <form action={addStock} className="flex items-center gap-1">
+                    <input type="hidden" name="productId" value={p.id} />
+                    <input name="qty" type="number" min="1" defaultValue="1" className="w-12 border rounded px-1 py-0.5 text-xs" />
+                    <button className="text-green-700 text-xs font-medium">+ repor</button>
+                  </form>
+                )}
+              </td>
               <td>
                 <form action={toggleVisible}>
                   <input type="hidden" name="id" value={p.id} />
