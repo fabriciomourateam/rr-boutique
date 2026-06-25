@@ -38,7 +38,7 @@ export default async function FiadoPage() {
       <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-neutral-500 border-b">
-            <th className="py-2">Cliente</th><th>Peça</th><th>Valor</th><th>Vence</th><th>Status</th><th></th>
+            <th className="py-2">Cliente</th><th>Itens</th><th>Valor</th><th>Vence</th><th>Status</th><th></th>
           </tr>
         </thead>
         <tbody>
