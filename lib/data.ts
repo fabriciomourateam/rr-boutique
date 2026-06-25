@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import type { Product, Category, StoreConfig, CreditSale } from '@/lib/types'
+import type { Product, Category, StoreConfig, CreditSale, CashEntry } from '@/lib/types'
 
 const PUBLIC_PRODUCT_COLS =
   'id, slug, name, description, category_id, price_cents, discount_type, discount_value, ' +
@@ -130,6 +130,22 @@ export async function getCreditSales(): Promise<CreditSale[]> {
     .order('paid', { ascending: true })
     .order('due_date', { ascending: true, nullsFirst: false })
   return (data ?? []).map(mapCreditSale)
+}
+
+export async function getCashEntries(): Promise<CashEntry[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('cash_entries')
+    .select('*')
+    .order('entry_date', { ascending: false })
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    kind: r.kind,
+    description: r.description,
+    amountCents: r.amount_cents,
+    entryDate: r.entry_date,
+  }))
 }
 
 export async function getStoreConfig(): Promise<StoreConfig> {

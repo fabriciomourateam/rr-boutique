@@ -37,8 +37,9 @@ export default async function ProdutosPage() {
                   </button>
                 </form>
               </td>
-              <td>
-                <form action={deleteProduct}>
+              <td className="whitespace-nowrap">
+                <Link href={`/painel/produtos/${p.id}`} className="text-[#E89BB0] text-xs mr-3">Editar</Link>
+                <form action={deleteProduct} className="inline">
                   <input type="hidden" name="id" value={p.id} />
                   <button className="text-red-600 text-xs">Excluir</button>
                 </form>

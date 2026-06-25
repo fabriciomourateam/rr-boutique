@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getCreditSales } from '@/lib/data'
 import { formatBRL } from '@/lib/money'
 import { creditStatus, formatDateBR, cobrancaLink, type CreditStatus } from '@/lib/fiado'
-import { markPaid, deleteCreditSale } from './actions'
+import { markPaid, markUnpaid, deleteCreditSale } from './actions'
 
 export default async function FiadoPage() {
   const sales = await getCreditSales()
@@ -51,25 +51,37 @@ export default async function FiadoPage() {
                 <td>{formatBRL(s.amountCents)}</td>
                 <td>{formatDateBR(s.dueDate) || '—'}</td>
                 <td><StatusBadge status={st} /></td>
-                <td className="space-x-3 whitespace-nowrap text-xs">
-                  {!s.paid && s.customerWhatsapp && (
-                    <a
-                      href={cobrancaLink(s.customerWhatsapp, { name: s.customerName, amountCents: s.amountCents, dueDate: s.dueDate })}
-                      target="_blank" rel="noopener noreferrer" className="text-[#E89BB0]"
-                    >
-                      Cobrar
-                    </a>
-                  )}
-                  {!s.paid && (
-                    <form action={markPaid} className="inline">
+                <td className="text-xs py-2">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    {!s.paid && s.customerWhatsapp && (
+                      <a
+                        href={cobrancaLink(s.customerWhatsapp, { name: s.customerName, amountCents: s.amountCents, dueDate: s.dueDate })}
+                        target="_blank" rel="noopener noreferrer" className="text-[#E89BB0]"
+                      >
+                        Cobrar
+                      </a>
+                    )}
+                    {!s.paid ? (
+                      <form action={markPaid} className="flex items-center gap-1">
+                        <input type="hidden" name="id" value={s.id} />
+                        <input type="date" name="paidAt" defaultValue={today}
+                          className="border rounded px-1.5 py-0.5 text-xs" title="Data do pagamento" />
+                        <button className="text-green-600 font-medium">Pago</button>
+                      </form>
+                    ) : (
+                      <>
+                        <span className="text-green-700">Pago em {formatDateBR(s.paidAt)}</span>
+                        <form action={markUnpaid} className="inline">
+                          <input type="hidden" name="id" value={s.id} />
+                          <button className="text-neutral-500">Desfazer</button>
+                        </form>
+                      </>
+                    )}
+                    <form action={deleteCreditSale} className="inline">
                       <input type="hidden" name="id" value={s.id} />
-                      <button className="text-green-600">Marcar pago</button>
+                      <button className="text-red-600">Excluir</button>
                     </form>
-                  )}
-                  <form action={deleteCreditSale} className="inline">
-                    <input type="hidden" name="id" value={s.id} />
-                    <button className="text-red-600">Excluir</button>
-                  </form>
+                  </div>
                 </td>
               </tr>
             )

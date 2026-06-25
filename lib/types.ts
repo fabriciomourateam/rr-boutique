@@ -47,6 +47,14 @@ export interface CreditSale {
   paidAt: string | null
 }
 
+export interface CashEntry {
+  id: string
+  kind: 'entrada' | 'saida'
+  description: string
+  amountCents: number
+  entryDate: string // ISO YYYY-MM-DD
+}
+
 export interface StoreConfig {
   name: string
   whatsapp: string         // só dígitos, com DDI: ex 5511999999999

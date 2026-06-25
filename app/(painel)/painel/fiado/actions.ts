@@ -36,6 +36,7 @@ export async function createCreditSale(formData: FormData) {
 
   revalidatePath('/painel/fiado')
   revalidatePath('/painel/produtos')
+  revalidatePath('/painel/financeiro')
   revalidatePath('/', 'layout')
   redirect('/painel/fiado')
 }
@@ -43,9 +44,19 @@ export async function createCreditSale(formData: FormData) {
 export async function markPaid(formData: FormData) {
   const id = String(formData.get('id'))
   const today = new Date().toISOString().slice(0, 10)
+  const paidAt = String(formData.get('paidAt') || '') || today
   const supabase = await createClient()
-  await supabase.from('credit_sales').update({ paid: true, paid_at: today }).eq('id', id)
+  await supabase.from('credit_sales').update({ paid: true, paid_at: paidAt }).eq('id', id)
   revalidatePath('/painel/fiado')
+  revalidatePath('/painel/financeiro')
+}
+
+export async function markUnpaid(formData: FormData) {
+  const id = String(formData.get('id'))
+  const supabase = await createClient()
+  await supabase.from('credit_sales').update({ paid: false, paid_at: null }).eq('id', id)
+  revalidatePath('/painel/fiado')
+  revalidatePath('/painel/financeiro')
 }
 
 export async function deleteCreditSale(formData: FormData) {
@@ -53,4 +64,5 @@ export async function deleteCreditSale(formData: FormData) {
   const supabase = await createClient()
   await supabase.from('credit_sales').delete().eq('id', id)
   revalidatePath('/painel/fiado')
+  revalidatePath('/painel/financeiro')
 }

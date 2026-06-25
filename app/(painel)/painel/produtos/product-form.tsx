@@ -13,23 +13,31 @@ export function ProductForm({ categories, product }: { categories: Category[]; p
     product?.variants.map((v) => ({ size: v.size, color: v.color, stock: v.stock })) ?? [],
   )
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
 
   async function onUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files
     if (!files?.length) return
     setUploading(true)
+    setUploadError('')
     const supabase = createClient()
     const urls: string[] = []
+    let failed = 0
     for (const file of Array.from(files)) {
-      const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`
       const { error } = await supabase.storage.from('produtos').upload(path, file)
       if (!error) {
         const { data } = supabase.storage.from('produtos').getPublicUrl(path)
         urls.push(data.publicUrl)
+      } else {
+        failed++
+        setUploadError(`Não consegui enviar a foto: ${error.message}`)
       }
     }
-    setPhotoUrls((prev) => [...prev, ...urls])
+    if (urls.length) setPhotoUrls((prev) => [...prev, ...urls])
+    if (failed === 0) setUploadError('')
     setUploading(false)
+    e.target.value = '' // permite reenviar o mesmo arquivo se precisar
   }
 
   return (
@@ -102,6 +110,7 @@ export function ProductForm({ categories, product }: { categories: Category[]; p
         <span className="text-sm text-neutral-600 block mb-1">Fotos</span>
         <input type="file" accept="image/*" multiple onChange={onUpload} />
         {uploading && <p className="text-sm text-neutral-500">Enviando…</p>}
+        {uploadError && <p className="text-sm text-red-600">{uploadError}</p>}
         <div className="flex gap-2 mt-2 flex-wrap">
           {photoUrls.map((u, i) => (
             <div key={i} className="relative">
