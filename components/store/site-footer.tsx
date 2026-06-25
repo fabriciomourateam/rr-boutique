@@ -13,7 +13,7 @@ export function SiteFooter({ categories, config }: { categories: Category[]; con
       <div className="max-w-[1280px] mx-auto px-4 py-14 grid sm:grid-cols-2 md:grid-cols-4 gap-10">
         <div>
           <p className="font-serif text-2xl text-[#F6F1EB]">
-            <span className="text-[#E8A1B4]">RR</span> Boutiques
+            <span className="text-[#E8A1B4]">RR</span> Boutique
           </p>
           <p className="mt-3 text-sm">Moda feminina com elegância, confiança e propósito.</p>
           <div className="flex gap-3 mt-4">
@@ -59,7 +59,7 @@ export function SiteFooter({ categories, config }: { categories: Category[]; con
 
       <div className="border-t border-[#2A2B2F]">
         <div className="max-w-[1280px] mx-auto px-4 py-5 text-xs text-[#6B6763] flex flex-col md:flex-row justify-between gap-2">
-          <span>© RR Boutiques. Todos os direitos reservados.</span>
+          <span>© RR Boutique. Todos os direitos reservados.</span>
           <span>Moda Feminina — Estilo • Elegância • Confiança</span>
         </div>
       </div>

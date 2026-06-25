@@ -28,7 +28,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0A0A0A] text-white p-4">
       <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
-        <h1 className="text-3xl font-serif text-[#E89BB0] text-center">RR Boutiques</h1>
+        <h1 className="text-3xl font-serif text-[#E89BB0] text-center">RR Boutique</h1>
         <p className="text-center text-neutral-400 text-sm">Painel da loja</p>
         <input
           className="w-full p-3 rounded bg-neutral-900 border border-neutral-700"

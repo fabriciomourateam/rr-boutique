@@ -10,7 +10,7 @@ export default async function PainelLayout({ children }: { children: React.React
   return (
     <div className="min-h-screen flex bg-neutral-50">
       <aside className="w-56 bg-[#0A0A0A] text-white p-4 space-y-1 shrink-0">
-        <p className="font-serif text-[#E89BB0] text-lg mb-4">RR Boutiques</p>
+        <p className="font-serif text-[#E89BB0] text-lg mb-4">RR Boutique</p>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel">Início</Link>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/produtos">Produtos</Link>
         <Link className="block py-2 hover:text-[#E89BB0]" href="/painel/fiado">Fiado / A Receber</Link>

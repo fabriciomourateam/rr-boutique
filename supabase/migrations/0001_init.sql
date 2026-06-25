@@ -45,7 +45,7 @@ create table photos (
 -- Configuração da loja (linha única)
 create table store_config (
   id integer primary key default 1 check (id = 1),
-  name text default 'RR Boutiques',
+  name text default 'RR Boutique',
   whatsapp text default '',
   pix_key text default '',
   instagram text default '',

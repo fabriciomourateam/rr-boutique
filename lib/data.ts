@@ -136,7 +136,7 @@ export async function getStoreConfig(): Promise<StoreConfig> {
   const supabase = await createClient()
   const { data } = await supabase.from('store_config').select('*').eq('id', 1).single()
   return {
-    name: data?.name ?? 'RR Boutiques',
+    name: data?.name ?? 'RR Boutique',
     whatsapp: data?.whatsapp ?? '',
     pixKey: data?.pix_key ?? '',
     instagram: data?.instagram ?? '',

@@ -10,9 +10,9 @@ const serif = Cormorant_Garamond({
 const sans = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: "RR Boutiques | Moda Feminina com Elegância e Sofisticação",
+  title: "RR Boutique | Moda Feminina com Elegância e Sofisticação",
   description:
-    "Peças femininas selecionadas com curadoria, sofisticação e estilo. Nova coleção RR Boutiques.",
+    "Peças femininas selecionadas com curadoria, sofisticação e estilo. Nova coleção RR Boutique.",
 };
 
 export default function RootLayout({

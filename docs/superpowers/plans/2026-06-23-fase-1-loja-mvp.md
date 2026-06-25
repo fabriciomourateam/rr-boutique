@@ -1,8 +1,8 @@
-# Fase 1 — Loja RR Boutiques (MVP) — Implementation Plan
+# Fase 1 — Loja RR Boutique (MVP) — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Colocar no ar a loja RR Boutiques como vitrine pública (catálogo) + painel interno onde a dona cadastra produtos com fotos/preços/estoque, com botão "Comprar pelo WhatsApp".
+**Goal:** Colocar no ar a loja RR Boutique como vitrine pública (catálogo) + painel interno onde a dona cadastra produtos com fotos/preços/estoque, com botão "Comprar pelo WhatsApp".
 
 **Architecture:** App Next.js (App Router) hospedado na Vercel. Dados, autenticação e fotos no Supabase (Postgres + Auth + Storage). Lógica de negócio (preço final, desconto, slug, mensagem de WhatsApp, estoque) isolada em funções puras em `lib/`, testadas com Vitest (TDD). Páginas e formulários consomem essas funções. Preços guardados em **centavos (inteiro)** para evitar erro de ponto flutuante.
 
@@ -635,7 +635,7 @@ create table photos (
 -- Configuração da loja (linha única)
 create table store_config (
   id integer primary key default 1 check (id = 1),
-  name text default 'RR Boutiques',
+  name text default 'RR Boutique',
   whatsapp text default '',
   pix_key text default '',
   instagram text default '',
@@ -786,7 +786,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0A0A0A] text-white p-4">
       <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
-        <h1 className="text-2xl font-serif text-[#E89BB0] text-center">RR Boutiques</h1>
+        <h1 className="text-2xl font-serif text-[#E89BB0] text-center">RR Boutique</h1>
         <input className="w-full p-3 rounded bg-neutral-900 border border-neutral-700"
           type="email" placeholder="E-mail" value={email}
           onChange={(e) => setEmail(e.target.value)} required />
@@ -852,7 +852,7 @@ export default async function PainelLayout({ children }: { children: React.React
   return (
     <div className="min-h-screen flex bg-neutral-50">
       <aside className="w-56 bg-[#0A0A0A] text-white p-4 space-y-2">
-        <p className="font-serif text-[#E89BB0] text-lg mb-4">RR Boutiques</p>
+        <p className="font-serif text-[#E89BB0] text-lg mb-4">RR Boutique</p>
         <Link className="block py-2" href="/painel">Início</Link>
         <Link className="block py-2" href="/painel/produtos">Produtos</Link>
         <Link className="block py-2" href="/painel/categorias">Categorias</Link>
@@ -962,7 +962,7 @@ export async function getStoreConfig(): Promise<StoreConfig> {
   const supabase = await createClient()
   const { data } = await supabase.from('store_config').select('*').eq('id', 1).single()
   return {
-    name: data?.name ?? 'RR Boutiques', whatsapp: data?.whatsapp ?? '', pixKey: data?.pix_key ?? '',
+    name: data?.name ?? 'RR Boutique', whatsapp: data?.whatsapp ?? '', pixKey: data?.pix_key ?? '',
     instagram: data?.instagram ?? '', bannerUrl: data?.banner_url ?? '',
     aboutText: data?.about_text ?? '', exchangeText: data?.exchange_text ?? '',
   }
@@ -1012,8 +1012,8 @@ const serif = Playfair_Display({ subsets: ['latin'], variable: '--font-serif' })
 const sans = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'RR Boutiques — Moda Feminina',
-  description: 'Estilo, elegância e confiança. Moda feminina RR Boutiques.',
+  title: 'RR Boutique — Moda Feminina',
+  description: 'Estilo, elegância e confiança. Moda feminina RR Boutique.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

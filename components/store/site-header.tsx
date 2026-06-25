@@ -18,7 +18,7 @@ export function SiteHeader({ categories, config }: { categories: Category[]; con
       <AnnouncementBar />
       <div className="max-w-[1280px] mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link href="/" className="font-serif text-2xl font-semibold tracking-wide">
-          <span className="text-[#E8A1B4]">RR</span> Boutiques
+          <span className="text-[#E8A1B4]">RR</span> Boutique
         </Link>
         <nav className="hidden lg:flex items-center gap-7 text-sm">
           {nav.map((n) => (

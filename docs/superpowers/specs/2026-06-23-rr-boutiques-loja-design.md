@@ -1,4 +1,4 @@
-# RR Boutiques — Loja Online + Painel de Gestão
+# RR Boutique — Loja Online + Painel de Gestão
 **Documento de Especificação (Design)**
 Data: 2026-06-23
 
@@ -6,7 +6,7 @@ Data: 2026-06-23
 
 ## 1. Visão geral
 
-Site para a loja de roupas **RR Boutiques** (revenda de peças compradas no Brás para o
+Site para a loja de roupas **RR Boutique** (revenda de peças compradas no Brás para o
 consumidor final). O sistema tem três partes que se conectam:
 
 1. **Vitrine** — a loja pública, onde o cliente final vê as peças.
