@@ -32,14 +32,14 @@ export function SiteHeader({ categories, config }: { categories: Category[]; con
         )}
       </div>
 
-      {/* faixa de categorias: rola na horizontal, cada nome em uma linha só */}
+      {/* faixa de categorias: quebra em linhas, cada nome inteiro (nada cortado) */}
       <nav className="border-t border-[#2A2B2F]">
-        <div className="max-w-[1280px] mx-auto px-4 overflow-x-auto no-scrollbar">
-          <div className="flex items-center gap-6 py-2.5 text-sm whitespace-nowrap">
+        <div className="max-w-[1280px] mx-auto px-4 py-2.5">
+          <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
             {nav.map((n) => (
               <Link
                 key={n.href} href={n.href}
-                className="text-[#B8AEA6] hover:text-[#E8A1B4] transition-colors shrink-0"
+                className="text-[#B8AEA6] hover:text-[#E8A1B4] transition-colors whitespace-nowrap"
               >
                 {n.label}
               </Link>

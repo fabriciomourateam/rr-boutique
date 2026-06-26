@@ -4,7 +4,7 @@ import type { StoreConfig } from '@/lib/types'
 export function AboutBanner({ config }: { config: StoreConfig }) {
   return (
     <section className="relative bg-[#0B0B0D] text-[#F6F1EB] overflow-hidden">
-      <div className="relative max-w-[1280px] mx-auto px-4 py-20 md:py-24">
+      <div className="relative max-w-[1280px] mx-auto px-4 py-12 md:py-16">
         <span className="pointer-events-none select-none absolute right-2 top-1/2 -translate-y-1/2 font-serif text-[12rem] md:text-[18rem] leading-none text-white/[0.04]">
           RR
         </span>
