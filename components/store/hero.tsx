@@ -20,9 +20,9 @@ export function Hero({ config }: { config: StoreConfig }) {
             'linear-gradient(90deg, rgba(11,11,13,0.95) 0%, rgba(11,11,13,0.82) 45%, rgba(11,11,13,0.35) 100%)',
         }}
       />
-      <div className="relative max-w-[1280px] mx-auto px-4 py-24 md:py-32">
+      <div className="relative max-w-[1280px] mx-auto px-4 py-12 md:py-16">
         <div className="max-w-xl">
-          <p className="uppercase tracking-[0.3em] text-xs text-[#C8A97E] mb-4">Nova coleção</p>
+          <p className="uppercase tracking-[0.3em] text-xs text-[#C8A97E] mb-3">Nova coleção</p>
           <h1 className="font-serif text-5xl md:text-6xl leading-[1.05]">
             Elegância que veste<br />
             sua <span className="text-[#E8A1B4] italic">melhor versão</span>.

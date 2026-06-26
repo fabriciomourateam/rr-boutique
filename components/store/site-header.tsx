@@ -17,18 +17,13 @@ export function SiteHeader({ categories, config }: { categories: Category[]; con
     <header className="sticky top-0 z-50 bg-[#0B0B0D] text-[#F6F1EB] border-b border-[#2A2B2F]">
       <AnnouncementBar />
       <div className="max-w-[1280px] mx-auto px-4 h-16 flex items-center justify-between gap-4">
-        <Link href="/" className="font-serif text-2xl font-semibold tracking-wide">
+        <Link href="/" className="font-serif text-2xl font-semibold tracking-wide shrink-0">
           <span className="text-[#E8A1B4]">RR</span> Boutique
         </Link>
-        <nav className="hidden lg:flex items-center gap-7 text-sm">
-          {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="hover:text-[#E8A1B4] transition-colors">{n.label}</Link>
-          ))}
-        </nav>
         {wa ? (
           <a
             href={wa} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-full border border-[#E8A1B4] text-[#E8A1B4] px-4 py-1.5 text-sm hover:bg-[#E8A1B4] hover:text-[#17181B] transition-colors"
+            className="flex items-center gap-2 rounded-full border border-[#E8A1B4] text-[#E8A1B4] px-4 py-1.5 text-sm hover:bg-[#E8A1B4] hover:text-[#17181B] transition-colors shrink-0"
           >
             <MessageCircle size={16} /> <span className="hidden sm:inline">WhatsApp</span>
           </a>
@@ -36,13 +31,22 @@ export function SiteHeader({ categories, config }: { categories: Category[]; con
           <span className="w-8" />
         )}
       </div>
-      <div className="lg:hidden border-t border-[#2A2B2F] overflow-x-auto">
-        <div className="flex gap-5 px-4 py-2 text-sm whitespace-nowrap">
-          {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="text-[#B8AEA6] hover:text-[#E8A1B4]">{n.label}</Link>
-          ))}
+
+      {/* faixa de categorias: rola na horizontal, cada nome em uma linha só */}
+      <nav className="border-t border-[#2A2B2F]">
+        <div className="max-w-[1280px] mx-auto px-4 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-6 py-2.5 text-sm whitespace-nowrap">
+            {nav.map((n) => (
+              <Link
+                key={n.href} href={n.href}
+                className="text-[#B8AEA6] hover:text-[#E8A1B4] transition-colors shrink-0"
+              >
+                {n.label}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      </nav>
     </header>
   )
 }

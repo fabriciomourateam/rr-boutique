@@ -39,3 +39,12 @@ body {
   font-family: var(--font-display), Georgia, serif;
   letter-spacing: 0.01em;
 }
+
+/* esconde a barra de rolagem da faixa de categorias */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
