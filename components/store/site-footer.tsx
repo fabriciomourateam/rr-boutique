@@ -33,12 +33,14 @@ export function SiteFooter({ categories, config }: { categories: Category[]; con
         <div>
           <p className="text-[#F6F1EB] font-medium mb-3 text-sm">Coleção</p>
           <ul className="space-y-2 text-sm">
-            {tops.map((c) => (
+            {tops.slice(0, 4).map((c) => (
               <li key={c.id}>
                 <Link href={`/categoria/${c.slug}`} className="hover:text-[#E8A1B4]">{c.name}</Link>
               </li>
             ))}
-            <li><Link href="/sobre" className="hover:text-[#E8A1B4]">Sobre nós</Link></li>
+            {tops.length > 4 && (
+              <li><Link href="/#categorias" className="text-[#E8A1B4] hover:text-[#D98DA3]">Mais...</Link></li>
+            )}
           </ul>
         </div>
 
@@ -47,6 +49,7 @@ export function SiteFooter({ categories, config }: { categories: Category[]; con
           <ul className="space-y-2 text-sm">
             {wa && <li><a href={wa} target="_blank" rel="noopener noreferrer" className="hover:text-[#E8A1B4]">WhatsApp</a></li>}
             <li><Link href="/sobre" className="hover:text-[#E8A1B4]">Trocas e devoluções</Link></li>
+            <li><Link href="/sobre" className="hover:text-[#E8A1B4]">Sobre nós</Link></li>
           </ul>
         </div>
 

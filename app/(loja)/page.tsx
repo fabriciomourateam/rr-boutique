@@ -25,7 +25,7 @@ export default async function Home() {
       <BenefitsBar />
 
       {tops.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-4 py-16">
+        <section id="categorias" className="max-w-[1280px] mx-auto px-4 py-16 scroll-mt-28">
           <SectionHeader title="Nova coleção" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-8">
             {tops.slice(0, 8).map((c) => (
