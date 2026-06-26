@@ -3,9 +3,32 @@ import { getAllProductsAdmin } from '@/lib/data'
 import { formatBRL } from '@/lib/money'
 import { totalStock } from '@/lib/stock'
 import { toggleVisible, deleteProduct, addStock } from './actions'
+import type { Product } from '@/lib/types'
 
-export default async function ProdutosPage() {
-  const products = await getAllProductsAdmin()
+const SORTS = [
+  { key: 'recentes', label: 'Mais recentes' },
+  { key: 'az', label: 'Nome A→Z' },
+  { key: 'za', label: 'Nome Z→A' },
+  { key: 'preco', label: 'Menor preço' },
+]
+
+function sortProducts(products: Product[], ordenar: string): Product[] {
+  const list = [...products]
+  if (ordenar === 'az') list.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+  else if (ordenar === 'za') list.sort((a, b) => b.name.localeCompare(a.name, 'pt-BR'))
+  else if (ordenar === 'preco') list.sort((a, b) => a.priceCents - b.priceCents)
+  // 'recentes' (padrão): mantém a ordem que já vem do banco (created_at desc)
+  return list
+}
+
+export default async function ProdutosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ordenar?: string }>
+}) {
+  const { ordenar = 'recentes' } = await searchParams
+  const products = sortProducts(await getAllProductsAdmin(), ordenar)
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -14,6 +37,23 @@ export default async function ProdutosPage() {
           + Cadastrar peça
         </Link>
       </div>
+
+      <div className="flex items-center gap-2 mb-4 text-sm flex-wrap">
+        <span className="text-neutral-500">Ordenar:</span>
+        {SORTS.map((s) => {
+          const active = s.key === ordenar
+          return (
+            <Link
+              key={s.key}
+              href={s.key === 'recentes' ? '/painel/produtos' : `/painel/produtos?ordenar=${s.key}`}
+              className={`px-3 py-1 rounded-full border ${active ? 'bg-[#E89BB0] text-black border-[#E89BB0]' : 'border-neutral-300 text-neutral-600 hover:border-[#E89BB0]'}`}
+            >
+              {s.label}
+            </Link>
+          )
+        })}
+      </div>
+
       <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-neutral-500 border-b">
@@ -72,7 +112,7 @@ export default async function ProdutosPage() {
             </tr>
           ))}
           {products.length === 0 && (
-            <tr><td colSpan={5} className="py-4 text-neutral-500">Nenhuma peça cadastrada.</td></tr>
+            <tr><td colSpan={6} className="py-4 text-neutral-500">Nenhuma peça cadastrada.</td></tr>
           )}
         </tbody>
       </table>
