@@ -11,6 +11,19 @@ export function creditStatus(
   return sale.dueDate < today ? 'vencido' : 'a-vencer'
 }
 
+export type OrderStatus = 'quitado' | 'parcial' | 'vencido' | 'a-vencer' | 'sem-data'
+
+export function orderStatus(
+  o: { amountCents: number; paidTotal: number; dueDate: string | null },
+  today: string,
+): OrderStatus {
+  if (o.amountCents > 0 && o.paidTotal >= o.amountCents) return 'quitado'
+  if (o.dueDate && o.dueDate < today) return 'vencido'
+  if (o.paidTotal > 0) return 'parcial'
+  if (!o.dueDate) return 'sem-data'
+  return 'a-vencer'
+}
+
 export function formatDateBR(iso: string | null): string {
   if (!iso) return ''
   const [y, m, d] = iso.slice(0, 10).split('-')

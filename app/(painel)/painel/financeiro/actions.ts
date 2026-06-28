@@ -13,6 +13,8 @@ export async function addCashEntry(formData: FormData) {
     description: String(formData.get('description') ?? '').trim(),
     amount_cents: reaisToCents(String(formData.get('amount') ?? '0')),
     entry_date: String(formData.get('entryDate') || '') || today,
+    supplier: String(formData.get('supplier') ?? '').trim(),
+    category: String(formData.get('category') ?? '').trim(),
   })
   revalidatePath('/painel/financeiro')
   revalidatePath('/painel')

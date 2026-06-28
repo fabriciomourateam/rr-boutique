@@ -36,15 +36,33 @@ export interface CreditSale {
   id: string
   customerName: string
   customerWhatsapp: string
+  description: string
+  amountCents: number     // total a receber (itens + frete, ou valor combinado)
+  freightCents: number
+  quantity: number
+  saleDate: string        // ISO YYYY-MM-DD (registro)
+  purchaseDate: string | null // ISO YYYY-MM-DD (data da compra)
+  dueDate: string | null  // ISO YYYY-MM-DD (vencimento)
+  paid: boolean
+  paidAt: string | null
+  paidTotal: number       // soma dos pagamentos (centavos) — calculado
+}
+
+export interface CreditSalePayment {
+  id: string
+  creditSaleId: string
+  amountCents: number
+  paidDate: string        // ISO YYYY-MM-DD
+  method: string
+}
+
+export interface CreditSaleItem {
+  id: string
   productId: string | null
   variantId: string | null
   description: string
-  amountCents: number
   quantity: number
-  saleDate: string        // ISO YYYY-MM-DD
-  dueDate: string | null  // ISO YYYY-MM-DD
-  paid: boolean
-  paidAt: string | null
+  amountCents: number
 }
 
 export interface CashEntry {
@@ -53,6 +71,8 @@ export interface CashEntry {
   description: string
   amountCents: number
   entryDate: string // ISO YYYY-MM-DD
+  supplier: string
+  category: string
 }
 
 export interface StoreConfig {

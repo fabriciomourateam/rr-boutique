@@ -1,5 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import type { Product, Category, StoreConfig, CreditSale, CashEntry } from '@/lib/types'
+import type {
+  Product, Category, StoreConfig, CreditSale, CashEntry,
+  CreditSalePayment, CreditSaleItem,
+} from '@/lib/types'
 
 const PUBLIC_PRODUCT_COLS =
   'id, slug, name, description, category_id, price_cents, discount_type, discount_value, ' +
@@ -105,19 +108,23 @@ export async function getCategories(): Promise<Category[]> {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function mapCreditSale(row: any): CreditSale {
+  const paidTotal = (row.credit_sale_payments ?? []).reduce(
+    (s: number, p: any) => s + (p.amount_cents ?? 0), 0,
+  )
   return {
     id: row.id,
     customerName: row.customer_name,
     customerWhatsapp: row.customer_whatsapp ?? '',
-    productId: row.product_id,
-    variantId: row.variant_id,
     description: row.description,
     amountCents: row.amount_cents,
+    freightCents: row.freight_cents ?? 0,
     quantity: row.quantity,
     saleDate: row.sale_date,
+    purchaseDate: row.purchase_date,
     dueDate: row.due_date,
     paid: row.paid,
     paidAt: row.paid_at,
+    paidTotal,
   }
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -126,10 +133,44 @@ export async function getCreditSales(): Promise<CreditSale[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('credit_sales')
-    .select('*')
+    .select('*, credit_sale_payments(amount_cents)')
     .order('paid', { ascending: true })
     .order('due_date', { ascending: true, nullsFirst: false })
   return (data ?? []).map(mapCreditSale)
+}
+
+export async function getCreditSaleById(id: string): Promise<{
+  order: CreditSale
+  items: CreditSaleItem[]
+  payments: CreditSalePayment[]
+} | null> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('credit_sales')
+    .select('*, credit_sale_payments(*), credit_sale_items(*)')
+    .eq('id', id)
+    .maybeSingle()
+  if (!data) return null
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const items: CreditSaleItem[] = (data.credit_sale_items ?? []).map((r: any) => ({
+    id: r.id, productId: r.product_id, variantId: r.variant_id,
+    description: r.description, quantity: r.quantity, amountCents: r.amount_cents,
+  }))
+  const payments: CreditSalePayment[] = (data.credit_sale_payments ?? [])
+    .map((r: any) => ({
+      id: r.id, creditSaleId: r.credit_sale_id, amountCents: r.amount_cents,
+      paidDate: r.paid_date, method: r.method ?? '',
+    }))
+    .sort((a: CreditSalePayment, b: CreditSalePayment) => a.paidDate.localeCompare(b.paidDate))
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+  return { order: mapCreditSale(data), items, payments }
+}
+
+export async function getAllPayments(): Promise<{ amountCents: number; paidDate: string }[]> {
+  const supabase = await createClient()
+  const { data } = await supabase.from('credit_sale_payments').select('amount_cents, paid_date')
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  return (data ?? []).map((r: any) => ({ amountCents: r.amount_cents, paidDate: r.paid_date }))
 }
 
 export async function getCashEntries(): Promise<CashEntry[]> {
@@ -145,6 +186,8 @@ export async function getCashEntries(): Promise<CashEntry[]> {
     description: r.description,
     amountCents: r.amount_cents,
     entryDate: r.entry_date,
+    supplier: r.supplier ?? '',
+    category: r.category ?? '',
   }))
 }
 

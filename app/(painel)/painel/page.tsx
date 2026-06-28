@@ -7,7 +7,7 @@ export default async function PainelHome() {
   const [products, sales] = await Promise.all([getAllProductsAdmin(), getCreditSales()])
   const ativos = products.filter((p) => p.visible).length
   const baixo = products.filter((p) => isLowStock(p) || isSoldOut(p)).length
-  const totalReceber = sales.filter((s) => !s.paid).reduce((sum, s) => sum + s.amountCents, 0)
+  const totalReceber = sales.reduce((sum, s) => sum + Math.max(0, s.amountCents - s.paidTotal), 0)
 
   return (
     <div>

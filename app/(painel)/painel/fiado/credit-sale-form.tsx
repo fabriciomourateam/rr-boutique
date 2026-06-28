@@ -2,34 +2,48 @@
 import { useState } from 'react'
 import type { Product } from '@/lib/types'
 import { finalPriceCents } from '@/lib/pricing'
-import { formatBRL } from '@/lib/money'
-import { createCreditSale } from './actions'
+import { formatBRL, reaisToCents } from '@/lib/money'
+import { createCreditSale, updateCreditSale } from './actions'
 
 type Line = { productId: string; variantId: string; qty: string }
+export type CreditSaleInitial = {
+  id: string
+  customerName: string
+  customerWhatsapp: string
+  purchaseDate: string
+  dueDate: string
+  freight: string
+  amount: string
+  lines: Line[]
+}
 
-export function CreditSaleForm({ products }: { products: Product[] }) {
-  const [lines, setLines] = useState<Line[]>([{ productId: '', variantId: '', qty: '1' }])
+export function CreditSaleForm({ products, initial }: { products: Product[]; initial?: CreditSaleInitial }) {
+  const sorted = [...products].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+  const isEdit = !!initial
+  const [lines, setLines] = useState<Line[]>(
+    initial?.lines?.length ? initial.lines : [{ productId: '', variantId: '', qty: '1' }],
+  )
+  const [freight, setFreight] = useState(initial?.freight ?? '')
 
-  const productById = (id: string) => products.find((p) => p.id === id)
+  const productById = (id: string) => sorted.find((p) => p.id === id)
 
   function update(i: number, patch: Partial<Line>) {
     setLines((prev) => prev.map((l, j) => (j === i ? { ...l, ...patch } : l)))
   }
-  function addLine() {
-    setLines((prev) => [...prev, { productId: '', variantId: '', qty: '1' }])
-  }
-  function removeLine(i: number) {
-    setLines((prev) => prev.filter((_, j) => j !== i))
-  }
+  function addLine() { setLines((prev) => [...prev, { productId: '', variantId: '', qty: '1' }]) }
+  function removeLine(i: number) { setLines((prev) => prev.filter((_, j) => j !== i)) }
 
-  const total = lines.reduce((sum, l) => {
+  const itemsTotal = lines.reduce((sum, l) => {
     const p = productById(l.productId)
     if (!p) return sum
     return sum + finalPriceCents(p) * Math.max(1, Number(l.qty) || 1)
   }, 0)
+  const total = itemsTotal + reaisToCents(freight || '0')
 
   return (
-    <form action={createCreditSale} className="max-w-2xl space-y-4">
+    <form action={isEdit ? updateCreditSale : createCreditSale} className="max-w-2xl space-y-4">
+      {isEdit && <input type="hidden" name="id" value={initial!.id} />}
+
       <div className="space-y-3">
         {lines.map((l, i) => {
           const p = productById(l.productId)
@@ -48,8 +62,8 @@ export function CreditSaleForm({ products }: { products: Product[] }) {
                 onChange={(e) => update(i, { productId: e.target.value, variantId: '' })}
                 className="w-full p-2 border rounded text-sm" required={i === 0}
               >
-                <option value="">— escolha a peça —</option>
-                {products.map((pp) => (
+                <option value="">— escolha a peça (digite a inicial) —</option>
+                {sorted.map((pp) => (
                   <option key={pp.id} value={pp.id}>{pp.name} — {formatBRL(finalPriceCents(pp))}</option>
                 ))}
               </select>
@@ -89,35 +103,52 @@ export function CreditSaleForm({ products }: { products: Product[] }) {
         + Adicionar peça ao pedido
       </button>
 
-      <div className="flex items-center justify-between border-t pt-3">
-        <span className="font-medium">Total do pedido</span>
-        <span className="font-serif text-xl">{formatBRL(total)}</span>
+      <div className="grid grid-cols-2 gap-4">
+        <label className="block">
+          <span className="text-sm text-neutral-600">Frete (R$)</span>
+          <input name="freight" value={freight} onChange={(e) => setFreight(e.target.value)}
+            placeholder="0,00" className="mt-1 w-full p-2 border rounded" />
+        </label>
+        <div className="flex items-end justify-end">
+          <div className="text-right">
+            <p className="text-sm text-neutral-500">Total do pedido</p>
+            <p className="font-serif text-xl">{formatBRL(total)}</p>
+          </div>
+        </div>
       </div>
 
       <label className="block">
         <span className="text-sm text-neutral-600">
           Valor a cobrar (deixe em branco para usar {formatBRL(total)}; preencha se deu desconto no conjunto)
         </span>
-        <input name="amount" placeholder={(total / 100).toFixed(2).replace('.', ',')} className="mt-1 w-full p-2 border rounded" />
+        <input name="amount" defaultValue={initial?.amount ?? ''} placeholder={(total / 100).toFixed(2).replace('.', ',')} className="mt-1 w-full p-2 border rounded" />
       </label>
 
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
           <span className="text-sm text-neutral-600">Nome do cliente</span>
-          <input name="customerName" className="mt-1 w-full p-2 border rounded" required />
+          <input name="customerName" defaultValue={initial?.customerName ?? ''} className="mt-1 w-full p-2 border rounded" required />
         </label>
         <label className="block">
           <span className="text-sm text-neutral-600">WhatsApp do cliente</span>
-          <input name="customerWhatsapp" placeholder="11999998888" className="mt-1 w-full p-2 border rounded" />
+          <input name="customerWhatsapp" defaultValue={initial?.customerWhatsapp ?? ''} placeholder="11999998888" className="mt-1 w-full p-2 border rounded" />
         </label>
       </div>
 
-      <label className="block">
-        <span className="text-sm text-neutral-600">Vence em (data combinada de pagamento)</span>
-        <input name="dueDate" type="date" className="mt-1 w-full p-2 border rounded" />
-      </label>
+      <div className="grid grid-cols-2 gap-4">
+        <label className="block">
+          <span className="text-sm text-neutral-600">Data da compra</span>
+          <input name="purchaseDate" type="date" defaultValue={initial?.purchaseDate ?? ''} className="mt-1 w-full p-2 border rounded" />
+        </label>
+        <label className="block">
+          <span className="text-sm text-neutral-600">Vence em (pagamento)</span>
+          <input name="dueDate" type="date" defaultValue={initial?.dueDate ?? ''} className="mt-1 w-full p-2 border rounded" />
+        </label>
+      </div>
 
-      <button className="px-6 py-2 rounded bg-[#E89BB0] text-black font-medium">Registrar pedido fiado</button>
+      <button className="px-6 py-2 rounded bg-[#E89BB0] text-black font-medium">
+        {isEdit ? 'Salvar alterações' : 'Registrar pedido fiado'}
+      </button>
     </form>
   )
 }
